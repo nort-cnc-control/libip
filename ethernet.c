@@ -25,10 +25,15 @@ SOFTWARE.
 #include <string.h>
 #include <ethernet.h>
 
+bool ethernet_validate(const uint8_t *data, size_t len)
+{
+    if (len < ETHERNET_HEADER_LEN)
+        return false;
+    return true;
+}
+
 uint16_t ethernet_get_ethertype(const uint8_t *data, size_t len)
 {
-    if (len < 14)
-        return 0xFFFF;
     return ((uint16_t)data[12]) << 8 | (data[13]);
 }
 
@@ -59,6 +64,6 @@ size_t ethernet_fill_header(uint8_t *buf, const uint8_t *src, const uint8_t *dst
 
 void ethernet_fill_payload(uint8_t *buf, const uint8_t *payload, size_t len)
 {
-    memmove(buf + 14, payload, len);
+    memmove(buf + ETHERNET_HEADER_LEN, payload, len);
 }
 

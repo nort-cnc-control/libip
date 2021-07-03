@@ -169,6 +169,8 @@ void libip_send_arp_response(const uint32_t remote_ip, const uint8_t remote_mac[
 
 static void handle_udp(const uint8_t *payload, size_t len)
 {
+	if (!udp_validate(payload, len))
+		return;
 	uint16_t sport = udp_get_source(payload, len);
 	uint16_t dport = udp_get_destination(payload, len);
 	size_t udp_payload_len;
@@ -179,12 +181,16 @@ static void handle_udp(const uint8_t *payload, size_t len)
 
 static void handle_icmp(const uint8_t *payload, size_t len)
 {
+	if (!icmp_validate(payload, len))
+		return;
 	uint8_t type = icmp_get_type(payload, len);
 	uint8_t code = icmp_get_code(payload, len);
 	switch (type)
 	{
 	case ICMP_TYPE_ECHO:
 	{
+		if (!icmp_echo_validate(payload, len))
+			break;
 		uint16_t id = icmp_echo_get_identifier(payload, len);
 		uint16_t sn = icmp_echo_get_sequence_number(payload, len);
 		size_t icmp_payload_len;
@@ -201,6 +207,9 @@ static void handle_icmp(const uint8_t *payload, size_t len)
 
 static void handle_ip(const uint8_t *payload, size_t len)
 {
+	if (!ip_validate(payload, len))
+		return;
+
 	uint8_t protocol = ip_get_protocol(payload, len);
 	packet_state.remote_ip = ip_get_source(payload, len);
 	remember_mac(packet_state.remote_ip, packet_state.remote_mac);
@@ -226,6 +235,9 @@ static void handle_ip(const uint8_t *payload, size_t len)
 
 static void handle_arp(const uint8_t *payload, size_t len)
 {
+	if (!arp_validate(payload, len))
+		return;
+
 	uint16_t hw = arp_get_hardware(payload, len);
 	uint16_t proto = arp_get_protocol(payload, len);
 
@@ -274,6 +286,9 @@ static void handle_arp(const uint8_t *payload, size_t len)
 
 void libip_handle_ethernet(const uint8_t *payload, size_t len)
 {
+	if (!ethernet_validate(payload, len))
+		return;
+
 	uint16_t ethertype = ethernet_get_ethertype(payload, len);
 
 	memcpy(packet_state.remote_mac, ethernet_get_source(payload, len), 6);

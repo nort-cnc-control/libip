@@ -25,6 +25,18 @@ SOFTWARE.
 #include <string.h>
 #include "udp.h"
 
+bool udp_validate(const uint8_t *data, size_t len)
+{
+    if (len < UDP_HEADER_LEN)
+        return false;
+    uint16_t total_len = udp_get_length(data, len);
+    if (total_len < UDP_HEADER_LEN)
+        return false;
+    if (len < total_len)
+        return false;
+    return true;
+}
+
 uint16_t udp_get_length(const uint8_t *data, size_t len)
 {
     const struct udp_header_s *hdr = (const struct udp_header_s *)data;

@@ -25,6 +25,16 @@ SOFTWARE.
 #include "arp.h"
 #include <string.h>
 
+bool arp_validate(const uint8_t *data, size_t len)
+{
+    if (len < ARP_HEADER_LEN)
+        return false;
+    const struct arp_header_s *hdr = (const struct arp_header_s *)data;
+    if (len < ARP_HEADER_LEN + 2*hdr->hardware_len + 2*hdr->protocol_len)
+        return false;
+    return true;
+}
+
 uint16_t arp_get_hardware(const uint8_t *data, size_t len)
 {
     const struct arp_header_s *hdr = (const struct arp_header_s *)data;

@@ -25,6 +25,7 @@ SOFTWARE.
 
 #include <unistd.h>
 #include <stdint.h>
+#include <stdbool.h>
 
 struct __attribute__((packed)) arp_header_s
 {
@@ -48,6 +49,7 @@ struct __attribute__((packed)) arp_header_s
 #define ARP_OPERATION_REQUEST 1
 #define ARP_OPERATION_RESPONSE 2
 
+bool arp_validate(const uint8_t *data, size_t len);
 
 uint16_t arp_get_hardware(const uint8_t *data, size_t len);
 uint16_t arp_get_protocol(const uint8_t *data, size_t len);

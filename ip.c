@@ -24,6 +24,28 @@ SOFTWARE.
 
 #include "ip.h"
 
+bool ip_validate(const uint8_t *data, size_t len)
+{
+    if (len < IP_HEADER_LEN)
+        return false;
+
+    // fragmentation not supported
+    if (ip_get_offset(data, len) != 0)
+        return false;
+
+    uint16_t declared_length = ip_get_length(data, len);
+    if (declared_length < IP_HEADER_LEN)
+        return false;
+    if (len < declared_length)
+        return false;
+    return true;
+}
+
+uint16_t ip_get_offset(const uint8_t *data, size_t len)
+{
+    const struct ip_header_s *hdr = (const struct ip_header_s *)data;
+    return hdr->offset_h << 8 | hdr->offset_l;
+}
 
 uint16_t ip_get_length(const uint8_t *data, size_t len)
 {
@@ -51,8 +73,7 @@ uint8_t ip_get_protocol(const uint8_t *data, size_t len)
 
 const uint8_t *ip_get_payload(const uint8_t *data, size_t len, size_t *plen)
 {
-    const struct ip_header_s *hdr = (const struct ip_header_s *)data;
-    *plen = (hdr->length_h << 8) | (hdr->length_l) - IP_HEADER_LEN;
+    *plen = ip_get_length(data, len) - IP_HEADER_LEN;
     return data + IP_HEADER_LEN;
 }
 

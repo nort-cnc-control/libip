@@ -25,6 +25,20 @@ SOFTWARE.
 #include "icmp.h"
 #include <string.h>
 
+bool icmp_validate(const uint8_t *data, size_t len)
+{
+    if (len < ICMP_HEADER_LEN)
+        return false;
+    return true;
+}
+
+bool icmp_echo_validate(const uint8_t *data, size_t len)
+{
+    if (len < ICMP_HEADER_LEN + ICMP_ECHO_LEN)
+        return false;
+    return true;
+}
+
 uint8_t icmp_get_type(const uint8_t *data, size_t len)
 {
    const struct icmp_header_s *hdr = (const struct icmp_header_s *)data;

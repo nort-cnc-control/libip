@@ -26,6 +26,7 @@ SOFTWARE.
 
 #include <unistd.h>
 #include <stdint.h>
+#include <stdbool.h>
 
 struct __attribute__((packed)) ip_header_s
 {
@@ -63,6 +64,9 @@ struct __attribute__((packed)) ip_header_s
 #define IP_PROTOCOL_ICMP 1
 #define IP_PROTOCOL_UDP 17
 
+bool ip_validate(const uint8_t *data, size_t len);
+
+uint16_t ip_get_offset(const uint8_t *data, size_t len);
 uint16_t ip_get_length(const uint8_t *data, size_t len);
 uint32_t ip_get_source(const uint8_t *data, size_t len);
 uint32_t ip_get_destination(const uint8_t *data, size_t len);

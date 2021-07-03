@@ -26,6 +26,7 @@ SOFTWARE.
 
 #include <unistd.h>
 #include <stdint.h>
+#include <stdbool.h>
 
 struct __attribute__((packed)) udp_header_s
 {
@@ -44,6 +45,7 @@ struct __attribute__((packed)) udp_header_s
 
 #define UDP_HEADER_LEN sizeof(struct udp_header_s)
 
+bool udp_validate(const uint8_t *data, size_t len);
 uint16_t udp_get_length(const uint8_t *data, size_t len);
 uint16_t udp_get_source(const uint8_t *data, size_t len);
 uint16_t udp_get_destination(const uint8_t *data, size_t len);

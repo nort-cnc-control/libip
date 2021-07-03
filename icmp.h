@@ -26,6 +26,7 @@ SOFTWARE.
 
 #include <unistd.h>
 #include <stdint.h>
+#include <stdbool.h>
 
 struct __attribute__((packed)) icmp_header_s
 {
@@ -52,6 +53,9 @@ struct __attribute__((packed)) icmp_echo_s
 
 #define ICMP_TYPE_ECHO_REPLY 0
 #define ICMP_CODE_ECHO_REPLY 0
+
+bool icmp_validate(const uint8_t *data, size_t len);
+bool icmp_echo_validate(const uint8_t *data, size_t len);
 
 uint8_t icmp_get_type(const uint8_t *data, size_t len);
 uint8_t icmp_get_code(const uint8_t *data, size_t len);

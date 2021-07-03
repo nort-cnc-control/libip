@@ -26,6 +26,7 @@ SOFTWARE.
 
 #include <unistd.h>
 #include <stdint.h>
+#include <stdbool.h>
 
 #define ETHERNET_MTU  1524
 
@@ -35,6 +36,7 @@ SOFTWARE.
 #define ETHERNET_ADDR_LEN 6
 #define ETHERNET_HEADER_LEN 14
 
+bool ethernet_validate(const uint8_t *data, size_t len);
 uint16_t ethernet_get_ethertype(const uint8_t *data, size_t len);
 const uint8_t *ethernet_get_target(const uint8_t *data, size_t len);
 const uint8_t *ethernet_get_source(const uint8_t *data, size_t len);
