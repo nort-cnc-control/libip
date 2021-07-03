@@ -48,9 +48,8 @@ uint8_t icmp_get_type(const uint8_t *data, size_t len)
 uint8_t icmp_get_code(const uint8_t *data, size_t len)
 {
    const struct icmp_header_s *hdr = (const struct icmp_header_s *)data;
-   return hdr->type;
+   return hdr->code;
 }
-
 
 uint16_t icmp_echo_get_identifier(const uint8_t *data, size_t len)
 {
